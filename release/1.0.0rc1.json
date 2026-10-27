@@ -1,0 +1,70 @@
+{
+  "commit": "2786347530077ce394cc85325f5477e6d45831c4",
+  "files": [
+    {
+      "filename": "lsdtools-1.0.0rc1-py3-none-any.whl",
+      "sha256": "bd8b15f9fb27bfd4783b522899033954084499b164666078557ac6b5240a1688",
+      "size": 230730
+    },
+    {
+      "filename": "lsdtools-1.0.0rc1.tar.gz",
+      "sha256": "2dea9b3c0f9d0b01cca9ba1d2a64532776065a81ebdcf133ff70a4276ef92a3c",
+      "size": 327728
+    }
+  ],
+  "gate_receipts": [
+    {
+      "python": "3.10.20",
+      "runtime": {
+        "arch": "x86_64",
+        "artifact_sha256": "d12254002deef7b069f8bf00c6235fd9899023180be8e1eedc56205d38fc5bf6",
+        "base_version": "1.0.1",
+        "platform": "windows",
+        "product": "desktop",
+        "published_at": 1793144088,
+        "release_id": "2b84cdf0ee2741bba14d1ffbc887fb3b",
+        "root": "C:\\Users\\Rodrigo\\AppData\\Local\\Temp\\lsd-testkit\\gate-20261027T234308Z\\home\\runtime\\versions\\1.0.10\\d12254002deef7b069f8bf00c6235fd9899023180be8e1eedc56205d38fc5bf6",
+        "selector": "1.0.10/d12254002deef7b069f8bf00c6235fd9899023180be8e1eedc56205d38fc5bf6",
+        "version": "1.0.10"
+      },
+      "sha256": "e3fcf969e36b8f76518753a791ea586f3f81ef56ed033e040387aff25a096745",
+      "target": "development"
+    },
+    {
+      "python": "3.12.10",
+      "runtime": {
+        "arch": "x86_64",
+        "artifact_sha256": "d12254002deef7b069f8bf00c6235fd9899023180be8e1eedc56205d38fc5bf6",
+        "base_version": "1.0.1",
+        "platform": "windows",
+        "product": "desktop",
+        "published_at": 1793144088,
+        "release_id": "2b84cdf0ee2741bba14d1ffbc887fb3b",
+        "root": "C:\\Users\\Rodrigo\\AppData\\Local\\Temp\\lsd-testkit\\gate-20261027T234626Z\\home\\runtime\\versions\\1.0.10\\d12254002deef7b069f8bf00c6235fd9899023180be8e1eedc56205d38fc5bf6",
+        "selector": "1.0.10/d12254002deef7b069f8bf00c6235fd9899023180be8e1eedc56205d38fc5bf6",
+        "version": "1.0.10"
+      },
+      "sha256": "ecc24d8742dc6b2dfcd797690064d46629ff87bb4fd27b5dc5a33a9f24250d8f",
+      "target": "development"
+    },
+    {
+      "python": "3.14.5",
+      "runtime": {
+        "arch": "x86_64",
+        "artifact_sha256": "d12254002deef7b069f8bf00c6235fd9899023180be8e1eedc56205d38fc5bf6",
+        "base_version": "1.0.1",
+        "platform": "windows",
+        "product": "desktop",
+        "published_at": 1793144088,
+        "release_id": "2b84cdf0ee2741bba14d1ffbc887fb3b",
+        "root": "C:\\Users\\Rodrigo\\AppData\\Local\\Temp\\lsd-testkit\\gate-20261027T234921Z\\home\\runtime\\versions\\1.0.10\\d12254002deef7b069f8bf00c6235fd9899023180be8e1eedc56205d38fc5bf6",
+        "selector": "1.0.10/d12254002deef7b069f8bf00c6235fd9899023180be8e1eedc56205d38fc5bf6",
+        "version": "1.0.10"
+      },
+      "sha256": "a4085b9295a9a3770b226bdf9f92c748f126b9b5c1d7947af00abc3928e7e5f6",
+      "target": "development"
+    }
+  ],
+  "schema": "lsdtools.release.v1",
+  "version": "1.0.0rc1"
+}

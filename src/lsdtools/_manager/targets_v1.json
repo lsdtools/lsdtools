@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "targets": {
+    "development": {
+      "origin": "http://127.0.0.1:8080",
+      "consumption_track": "alpha",
+      "updates_public_keys": ["1fd90988bed46eede0fa0ab9041f096cf5f777774d092132e6f424514161cd14"],
+      "catalog_public_keys": ["748479b318728e6f95b628fc72570000c311e43c472aa16c94b200df9cb108da"]
+    },
+    "production": {
+      "origin": "https://lsd.tools",
+      "consumption_track": "prod",
+      "updates_public_keys": ["e9765a4e026126d4167a5641764ac1a4895f45957d99699f9fcb72ef9d64d650"],
+      "catalog_public_keys": ["cfa7c9d4031d324af8d23a1a56886038524df881864b9931d4ade0b238d8ba4a"]
+    }
+  }
+}

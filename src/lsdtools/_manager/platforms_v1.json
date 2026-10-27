@@ -1,0 +1,57 @@
+{
+  "schema": "lsd-runtime-platforms/v1",
+  "note": "A copy of base/packaging/contracts/runtime-platforms-v1.json's rows, held equal to it by test_manager_contracts.py.",
+  "platforms": [
+    {
+      "id": "windows-x86_64",
+      "platform": "windows",
+      "arch": "x86_64",
+      "state": "available",
+      "desktop_executable": "LSDDesktop.exe",
+      "cli_executable": "LSDCli.exe",
+      "app_bundle": "bundles/app.pak",
+      "base_archive_format": "tar.zst.base-v1",
+      "runtime_archive_format": "tar.zst.delta-v1"
+    },
+    {
+      "id": "linux-x86_64",
+      "platform": "linux",
+      "arch": "x86_64",
+      "state": "planned",
+      "desktop_executable": "bin/lsd-desktop",
+      "cli_executable": "bin/lsd-cli",
+      "app_bundle": "bundles/app.pak",
+      "base_archive_format": "tar.zst.base-v1",
+      "runtime_archive_format": "tar.zst.delta-v1"
+    },
+    {
+      "id": "macos-arm64",
+      "platform": "macos",
+      "arch": "arm64",
+      "state": "planned",
+      "desktop_executable": "LSD.app/Contents/MacOS/lsd-desktop",
+      "cli_executable": "LSD.app/Contents/MacOS/lsd-cli",
+      "app_bundle": "LSD.app/Contents/Resources/bundles/app.pak",
+      "base_archive_format": "tar.zst.base-v1",
+      "runtime_archive_format": "tar.zst.delta-v1"
+    },
+    {
+      "id": "windows-arm64",
+      "platform": "windows",
+      "arch": "arm64",
+      "state": "unavailable"
+    },
+    {
+      "id": "linux-arm64",
+      "platform": "linux",
+      "arch": "arm64",
+      "state": "unavailable"
+    },
+    {
+      "id": "macos-x86_64",
+      "platform": "macos",
+      "arch": "x86_64",
+      "state": "unavailable"
+    }
+  ]
+}

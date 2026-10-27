@@ -1,0 +1,48 @@
+{
+  "author": "LSD",
+  "classifiers": [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14"
+  ],
+  "dependencies": [
+    "zstandard>=0.23,<1"
+  ],
+  "gui_scripts": [
+    [
+      "lsdtools-gui",
+      "lsdtools._manager.gui:main"
+    ]
+  ],
+  "license": "Apache-2.0",
+  "name": "lsdtools",
+  "requires_python": ">=3.10",
+  "scripts": [
+    [
+      "lsdtools",
+      "lsdtools._manager.cli:main"
+    ]
+  ],
+  "source_date_epoch": 1793143439,
+  "summary": "Install exact signed LSD runtimes and run projects, packages and scripts in them",
+  "urls": [
+    [
+      "Homepage",
+      "https://lsd.tools"
+    ],
+    [
+      "Source",
+      "https://github.com/lsdtools/lsdtools"
+    ]
+  ],
+  "version": "1.0.0rc1"
+}

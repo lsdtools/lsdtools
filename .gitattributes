@@ -1,0 +1,2 @@
+# The release rebuilds these exact bytes on every runner: no line-ending conversion, ever.
+* -text
