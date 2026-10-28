@@ -11,7 +11,10 @@
       "origin": "https://lsd.tools",
       "consumption_track": "prod",
       "updates_public_keys": ["21bd0342f56f2e6705505e29d97d436df9e5b1cfa0fdf676cdba1c4b592ed2da"],
-      "catalog_public_keys": ["b4bd3a45dfcd85a21fd0299fcf9418e31900caa5aefc9dfa9813889c79a17c5b"]
+      "catalog_public_keys": ["b4bd3a45dfcd85a21fd0299fcf9418e31900caa5aefc9dfa9813889c79a17c5b"],
+      "artifact_mirrors": [
+        "https://github.com/lsdtools/runtimes/releases/download/{product}-{version}/{artifact_sha256}.lsdruntime"
+      ]
     }
   }
 }

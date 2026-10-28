@@ -3,6 +3,10 @@
 ``targets_v1.json`` carries public facts only. lsd-installer's ``server-targets.json`` is their
 authority, and its tests hold this copy equal to it. A target's keys are a set (the current key and,
 during a rotation, the next), so a store signed under the current key stays valid across a rotation.
+
+A target may also name artifact mirrors: URL templates tried, in order, before the origin's own download
+route. A mirror only carries bytes; every download is held to the signed manifest's exact size and sha256,
+whichever host served it (mirrors.MIRROR_HOSTS).
 """
 from __future__ import annotations
 
@@ -13,6 +17,7 @@ from typing import NamedTuple
 
 from .ed25519 import key_id
 from .errors import ManagerError
+from .mirrors import require_mirror_template
 
 __all__ = ["TARGET_NAMES", "Target", "get_target"]
 
@@ -27,6 +32,8 @@ class Target(NamedTuple):  # a NamedTuple: a launch imports no dataclasses (and 
     consumption_track: str
     updates_public_keys: tuple[str, ...]
     catalog_public_keys: tuple[str, ...]
+    #: URL templates over {product}, {version} and {artifact_sha256}, tried before the origin.
+    artifact_mirrors: tuple[str, ...] = ()
 
     @property
     def updates_keys(self) -> dict[str, str]:
@@ -52,7 +59,13 @@ def _load() -> dict[str, Target]:
         keys = tuple(value["updates_public_keys"]), tuple(value["catalog_public_keys"])
         if not all(keys) or not all(_KEY_RE.fullmatch(key) for group in keys for key in group):
             raise ManagerError("internal", f"this wheel's {name} target has malformed keys")
-        result[name] = Target(name, value["origin"].rstrip("/"), value["consumption_track"], *keys)
+        target = Target(name, value["origin"].rstrip("/"), value["consumption_track"], *keys)
+        mirrors = value.get("artifact_mirrors", [])
+        if type(mirrors) is not list or not all(type(template) is str for template in mirrors):
+            raise ManagerError("internal", f"this wheel's {name} target has malformed artifact mirrors")
+        for template in mirrors:
+            require_mirror_template(template, loopback=target.loopback)
+        result[name] = target._replace(artifact_mirrors=tuple(mirrors))
     if not result["production"].origin.startswith("https://"):
         raise ManagerError("internal", "the production target must be HTTPS")
     if not (result["development"].origin.startswith("https://") or result["development"].loopback):
