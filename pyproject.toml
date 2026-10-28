@@ -6,7 +6,7 @@ backend-path = ["tools"]
 
 [project]
 name = "lsdtools"
-version = "1.0.0rc2"
+version = "1.0.0rc3"
 description = "Install exact signed LSD runtimes and run projects, packages and scripts in them"
 readme = "README.md"
 requires-python = ">=3.10"

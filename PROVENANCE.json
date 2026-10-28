@@ -1,5 +1,5 @@
 {
-  "commit": "54b0f3d5c828cab4532db27356954082caf89101",
+  "commit": "6bd44c59c60829e8c3905befea1a19ba42f7d6f0",
   "dirty": false,
   "files": {
     ".gitattributes": "0d7ee71bd406b17ade2bf2548a3272932ddbfb094b5304e639862fb1913c2e7a",
@@ -10,10 +10,10 @@
     "CLI.md": "fdcf76e1b1687b0128091679cb05c3b0bbb2c990976b65aef3c299be2749edce",
     "LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "README.md": "461b683325fac09391ae94c4494b3544b270488e52821c16a8b1eba574b0d7ff",
-    "docs/release/WEB_AGENT.md": "3fae3982a2089c0cd75a8f11f9d62d361ed9537761f8d5b6b9f07ae127d0075a",
-    "pyproject.toml": "7a7feb725e0007434236327634933f516ff1cc25ed4a73453ce9dd7520e5537e",
-    "src/lsdtools/__init__.py": "ceca11f623f7932112e57ffd273fac79b731f315b72620e555affee7a06cd602",
-    "src/lsdtools/_manager/__init__.py": "d108a32282be8b72b10e42d1a6e69f0c29aa042c37c904b28aab19102f4954ce",
+    "docs/release/WEB_AGENT.md": "a33034ab5d99025df8e71d51014a6d19d91d84206e81d694a130b1354405b9b3",
+    "pyproject.toml": "29c0ec539d2978062d3665a57cdd7b8c4ce974ac3d101cf91d5fb59403ef9bd6",
+    "src/lsdtools/__init__.py": "ef14061d9ad463a0ad3aa108a9a4e5df5e86b5de213e4f252142200df0bab734",
+    "src/lsdtools/_manager/__init__.py": "5f4cdbc4e4ba70af19c5e1492fc6803e1ff3e59aa60637c8317f22796f96cdb7",
     "src/lsdtools/_manager/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
     "src/lsdtools/_manager/archive.py": "3542a3f4e00791a06c26afd561a613119add8f99c3f52c4649f38e1d9b40acef",
     "src/lsdtools/_manager/canonical.py": "b4210ab8aeb65cd8cfe1a9e0db66b49ffca6aba3fa6c77acd9ac6f6ff8f1b4e4",
@@ -31,7 +31,7 @@
     "src/lsdtools/_manager/report.py": "685e54abd3683d0826ea32ecd7c668bee0d9edd5e0e24895f79939dd64003950",
     "src/lsdtools/_manager/store.py": "f7648dfa8431989982420e5176d1df65dcb86899188763563ac99792c5c71702",
     "src/lsdtools/_manager/targets.py": "3a20e984baa55e2f6905268223d4c81a7c092c4b3884353d09ff64c6f5d55358",
-    "src/lsdtools/_manager/targets_v1.json": "eedb1a9da217ab1eb2c65bc78d04ee66ef9e7d1807ab6441a65203c8c7f52663",
+    "src/lsdtools/_manager/targets_v1.json": "a9cac7fd1ba8333822c8764a317135f880d86800817ec6ee0f6f6f04a22656fb",
     "src/lsdtools/_manager/transport.py": "861d541ef27f048b693b723095368c9532bc1d3cb3ff3ffb95b784fc141b0eb6",
     "src/lsdtools/_manager/verify.py": "bfea40876536fb408bead0ba2d6355eeb5c950299eb2df11d4569a967bde6c13",
     "tests/test_front_door.py": "1c91d70367095e33b1cc575ecaf0fbbc00f8de02ea958eebfdf5eca016ba34d5",
@@ -40,7 +40,7 @@
     "tools/check_provenance.py": "6779456af4f853f4ceb24de52bb3fc2513f7ac595f22119543234dc6f390d67a",
     "tools/check_release.py": "eeb8a5515964e817fc796b1d3c3818bc7872b5eb61015689c72e38ac1b4871b9",
     "tools/wheel_backend.py": "93eb102865520ceeff92ba32f414ae834f291ba9891c23fc57f466c0400a3228",
-    "wheel.json": "53c836cb4ddfef4dd876951944ede22110e54992fbcd65acc73967ab9a1842ae"
+    "wheel.json": "73acd4980ab794c60f74435e21ba1604bda40de325a6013efd4420c42aee6900"
   },
   "generator": {
     "sha256": "15ca6983ae583c88e985bebce269b41a18fdb86bf9399387f78630fde8675045",
@@ -48,6 +48,6 @@
   },
   "product": "lsd-product",
   "schema": "lsdtools.provenance.v1",
-  "source_date_epoch": 1793153867,
-  "version": "1.0.0rc2"
+  "source_date_epoch": 1793187327,
+  "version": "1.0.0rc3"
 }
