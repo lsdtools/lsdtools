@@ -5,11 +5,10 @@
 #   build       the wheel and sdist this tree builds have the sha256 release/<version>.json names
 #   reproduce   Windows and macOS build the same bytes
 #   test        the artifact itself, installed, on three systems and Python 3.10 to 3.14
-#   testpypi    published by trusted publishing, after a person approves the testpypi environment
-#   pypi        the same files, after a person approves the pypi environment; then the index serves
-#               exactly those sha256 and attests this workflow published them
+#   pypi        published by trusted publishing, after a person approves the pypi environment; then the
+#               index serves exactly those sha256 and attests this workflow published them
 #   release     the GitHub release carries the files and their release record
-# Every action is pinned to a commit. Only the two publishing jobs may request an OIDC token.
+# Every action is pinned to a commit. Only the publishing job may request an OIDC token.
 name: release
 
 on:
@@ -85,38 +84,8 @@ jobs:
       - name: test it
         run: python -m unittest discover -s tests -v
 
-  testpypi:
-    needs: [reproduce, test]
-    runs-on: ubuntu-24.04
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/lsdtools
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
-        with:
-          name: dist
-          path: dist
-      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086  # v1.14.3
-        with:
-          repository-url: https://test.pypi.org/legacy/
-
-  testpypi-served:
-    needs: testpypi
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
-        with:
-          python-version: "3.12"
-      - name: TestPyPI serves the release
-        run: python tools/check_index.py https://test.pypi.org "${GITHUB_REF_NAME#v}"
-
   pypi:
-    needs: testpypi-served
+    needs: [reproduce, test]
     runs-on: ubuntu-24.04
     environment:
       name: pypi

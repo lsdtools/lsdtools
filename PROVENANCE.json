@@ -1,19 +1,19 @@
 {
-  "commit": "2786347530077ce394cc85325f5477e6d45831c4",
+  "commit": "54b0f3d5c828cab4532db27356954082caf89101",
   "dirty": false,
   "files": {
     ".gitattributes": "0d7ee71bd406b17ade2bf2548a3272932ddbfb094b5304e639862fb1913c2e7a",
-    ".github/ISSUE_TEMPLATE/release.md": "f080e44a0035df40de3b55272b681479c2844e70cd0c448be20f5ca55c8a246c",
+    ".github/ISSUE_TEMPLATE/release.md": "d8b6723b51b53f914432b5b6a135cd6f730bdd81d22c7ae83850cf135a2c9a64",
     ".github/workflows/check.yml": "3f000006311a3bebd44ec62ff16f7d75234918145e23ec4653ef7e917554b1a3",
-    ".github/workflows/release.yml": "bcba69ac296d90ccd7f10d2e398542f4da4b4c177bf7ef05819bc3206d123a3f",
+    ".github/workflows/release.yml": "cd582135db0367e76ddbfda863ca59fafdb30677e67bf735f2b796d9368c0b7e",
     ".gitignore": "bf7224daa29be47cef87a50b0351d18e729d129be606faa8e4718116d6e51d87",
     "CLI.md": "fdcf76e1b1687b0128091679cb05c3b0bbb2c990976b65aef3c299be2749edce",
     "LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "README.md": "461b683325fac09391ae94c4494b3544b270488e52821c16a8b1eba574b0d7ff",
-    "docs/release/WEB_AGENT.md": "7b1fae0c9a928428ca7bef4835eed86f9db21102cd29336e89890e2e939ab931",
-    "pyproject.toml": "1d2c7c1863620edc1ba4ecd079beae3a8838df45289beb133d7f87494236daa5",
-    "src/lsdtools/__init__.py": "676c267cffe176ef172f6cefad83424ddf2d627ba8722d54d18c2f9125463631",
-    "src/lsdtools/_manager/__init__.py": "e87ee2bf43a58500f99d3b259c36302a421e2c4940bef78b67262cb18c0e8071",
+    "docs/release/WEB_AGENT.md": "3fae3982a2089c0cd75a8f11f9d62d361ed9537761f8d5b6b9f07ae127d0075a",
+    "pyproject.toml": "7a7feb725e0007434236327634933f516ff1cc25ed4a73453ce9dd7520e5537e",
+    "src/lsdtools/__init__.py": "ceca11f623f7932112e57ffd273fac79b731f315b72620e555affee7a06cd602",
+    "src/lsdtools/_manager/__init__.py": "d108a32282be8b72b10e42d1a6e69f0c29aa042c37c904b28aab19102f4954ce",
     "src/lsdtools/_manager/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
     "src/lsdtools/_manager/archive.py": "3542a3f4e00791a06c26afd561a613119add8f99c3f52c4649f38e1d9b40acef",
     "src/lsdtools/_manager/canonical.py": "b4210ab8aeb65cd8cfe1a9e0db66b49ffca6aba3fa6c77acd9ac6f6ff8f1b4e4",
@@ -36,11 +36,11 @@
     "src/lsdtools/_manager/verify.py": "bfea40876536fb408bead0ba2d6355eeb5c950299eb2df11d4569a967bde6c13",
     "tests/test_front_door.py": "1c91d70367095e33b1cc575ecaf0fbbc00f8de02ea958eebfdf5eca016ba34d5",
     "tools/build.py": "926a7e63eb65219d8e185a8ae3cc9a0ab4e79f77871018d8398c2aa0b291e413",
-    "tools/check_index.py": "a48d49377a0eaaa640cd1e4938ab4bbfa75ac136c2cdf96b365c622e86c63856",
+    "tools/check_index.py": "62568f3e41624873850a0452c25b033a635e97e408a1bc9350c11b7530b956a7",
     "tools/check_provenance.py": "6779456af4f853f4ceb24de52bb3fc2513f7ac595f22119543234dc6f390d67a",
     "tools/check_release.py": "eeb8a5515964e817fc796b1d3c3818bc7872b5eb61015689c72e38ac1b4871b9",
     "tools/wheel_backend.py": "93eb102865520ceeff92ba32f414ae834f291ba9891c23fc57f466c0400a3228",
-    "wheel.json": "8ef7a5f6bed9c81eb267515d3aa8b90b7ce1fd2dad2a7a18fba649d081a771a1"
+    "wheel.json": "53c836cb4ddfef4dd876951944ede22110e54992fbcd65acc73967ab9a1842ae"
   },
   "generator": {
     "sha256": "15ca6983ae583c88e985bebce269b41a18fdb86bf9399387f78630fde8675045",
@@ -48,6 +48,6 @@
   },
   "product": "lsd-product",
   "schema": "lsdtools.provenance.v1",
-  "source_date_epoch": 1793143439,
-  "version": "1.0.0rc1"
+  "source_date_epoch": 1793153867,
+  "version": "1.0.0rc2"
 }

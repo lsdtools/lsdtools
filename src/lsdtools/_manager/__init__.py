@@ -9,4 +9,4 @@ platforms are runtime-platforms-v1, and its command line is lsdtools-cli-v1 (``l
 """
 
 #: The PyPI ``lsdtools`` release this manager is: it versions apart from the runtimes it installs.
-VERSION = "1.0.0rc1"
+VERSION = "1.0.0rc2"

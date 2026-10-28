@@ -1,7 +1,7 @@
 """Check a package index serves exactly the release: each file's sha256 as release/<version>.json names it,
 and, on PyPI, its attestation names this repository's release workflow as the publisher.
 
-    python tools/check_index.py https://pypi.org VERSION      (or https://test.pypi.org)
+    python tools/check_index.py https://pypi.org VERSION
 
 An index may take a moment to list a new upload: this reads it again for up to five minutes, the one
 wait it has, because the upload's own job already finished. Standard library only.

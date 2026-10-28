@@ -16,5 +16,5 @@ labels: release
 - gate receipts' sha256 (release/VERSION.json): 
 - workflow run: https://github.com/lsdtools/lsdtools/actions/runs/
 
-The web agent follows docs/release/WEB_AGENT.md: it approves `testpypi`, then `pypi`, only when the run's
+The web agent follows docs/release/WEB_AGENT.md: it approves `pypi` only when the run's
 sha256 equal the ones above, then reports here and closes this issue.
