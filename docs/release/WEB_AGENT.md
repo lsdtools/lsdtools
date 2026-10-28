@@ -19,15 +19,15 @@ The owner opens an issue in `lsdtools/lsdtools` from the release template, holdi
 
 | field | example |
 |---|---|
-| version and tag | `1.0.0rc1`, `v1.0.0rc1` |
-| the wheel and the sdist | `lsdtools-1.0.0rc1-py3-none-any.whl`, `lsdtools-1.0.0rc1.tar.gz` |
-| their sha256 | as in `release/1.0.0rc1.json` |
-| the gate receipts' sha256 | as in `release/1.0.0rc1.json` |
+| version and tag | `1.0.0rc2`, `v1.0.0rc2` |
+| the wheel and the sdist | `lsdtools-1.0.0rc2-py3-none-any.whl`, `lsdtools-1.0.0rc2.tar.gz` |
+| their sha256 | as in `release/1.0.0rc2.json` |
+| the gate receipts' sha256 | as in `release/1.0.0rc2.json` |
 | the workflow run | `https://github.com/lsdtools/lsdtools/actions/runs/<id>` |
 
-## 3. Once: PyPI and TestPyPI accounts
+## 3. Once: the PyPI account
 
-The owner holds both accounts (pypi.org and test.pypi.org), each with 2FA by a security key or an
+The owner holds the pypi.org account, with 2FA by a security key or an
 authenticator, and keeps the recovery codes. If an account is missing or has no 2FA, stop and report.
 
 ## 4. Once: GitHub
@@ -39,12 +39,12 @@ authenticator, and keeps the recovery codes. If an account is missing or has no 
 3. Settings > Rules > Rulesets:
    - `main`: no deletion, no force push, changes by pull request only;
    - tags `v*`: no deletion, no update.
-4. Settings > Environments: `testpypi` and `pypi`, each with the owner as required reviewer,
+4. Settings > Environments: `pypi`, with the owner as required reviewer, administrators not allowed to bypass it,
    deployment tags only (`v*`), and no secrets.
 
-## 5. Once: pending trusted publishers
+## 5. Once: the pending trusted publisher
 
-On pypi.org (Account > Publishing > Add a new pending publisher) and on test.pypi.org (same page):
+On pypi.org, under the LSD.tools organization (Publishing > Add a new pending publisher):
 
 | field | value |
 |---|---|
@@ -52,7 +52,7 @@ On pypi.org (Account > Publishing > Add a new pending publisher) and on test.pyp
 | owner | `lsdtools` |
 | repository name | `lsdtools` |
 | workflow name | `release.yml` |
-| environment name | `pypi` on pypi.org, `testpypi` on test.pypi.org |
+| environment name | `pypi` |
 
 A pending publisher does not reserve the name; the first upload does.
 
@@ -61,8 +61,7 @@ A pending publisher does not reserve the name; the first upload does.
 1. Open the issue's run. Wait until `build`, `reproduce` and every `test` job are green. Do not
    approve anything before that.
 2. Open the `build` job's "the tested release" step: its sha256 lines must equal the issue's, file by file.
-3. Approve the `testpypi` deployment. Wait for `testpypi-served` to pass.
-4. Approve the `pypi` deployment. Wait for `pypi-served` and `github-release` to pass.
+3. Approve the `pypi` deployment. Wait for `pypi-served` and `github-release` to pass.
 
 ## 7. Verify
 
@@ -90,7 +89,7 @@ installed yet is expected).
 
 Never delete. Yank the release on PyPI with a reason (PEP 592: Manage > Options > Yank), and tell the
 owner, who ships the next version with the fix. If the repository itself may be compromised, remove
-the trusted publishers on both indexes first, then report.
+the trusted publisher on pypi.org first, then report.
 
 ## 10. Report
 
