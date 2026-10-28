@@ -21,6 +21,7 @@ from typing import TYPE_CHECKING, Callable, Iterable, NamedTuple
 from .archive import MANIFEST_NAME, extract, index_sha256, tree_sha256
 from .canonical import canonical_bytes, sha256_bytes, sha256_file, strict_loads
 from .manifests import check_base_manifest, check_runtime_manifest, version_key
+from .mirrors import mirror_url
 from .ed25519 import verify as verify_signature
 from .errors import ManagerError
 from .paths import WINDOWS, child, long_path
@@ -454,13 +455,23 @@ class Store:
     # -- installing ------------------------------------------------------------------------------
 
     def _download(self, transport: Transport, row: CatalogRow, progress) -> Path:
+        """The signed artifact's bytes: from the target's mirrors first (GitHub Releases), else its origin.
+
+        Every source is held to the signed manifest's exact size and sha256; a mirror that is missing, slow or
+        wrong only moves the download on. Each source resumes its own ``.part`` file."""
         downloads = self.root / "downloads"
         os.makedirs(long_path(downloads), exist_ok=True)
-        part = downloads / f"{row.coordinate['artifact_sha256']}.part"
+        sha256 = row.coordinate["artifact_sha256"]
+        size = row.manifest["archive_size"]
         label = f"{row.product} {row.coordinate['version']}"
-        return transport.download(row.url, part, size=row.manifest["archive_size"],
-                                  sha256=row.coordinate["artifact_sha256"],
-                                  progress=None if progress is None else lambda have, size: progress(label, have, size))
+        report = None if progress is None else lambda have, total: progress(label, have, total)
+        for template in self.target.artifact_mirrors:
+            try:
+                return transport.download_mirror(mirror_url(template, row.coordinate), downloads / f"{sha256}.mirror.part",
+                                                 size=size, sha256=sha256, progress=report)
+            except ManagerError:
+                continue  # the origin serves the same signed bytes
+        return transport.download(row.url, downloads / f"{sha256}.part", size=size, sha256=sha256, progress=report)
 
     def _base_root(self, coordinate: dict) -> Path:
         return self.root / "bases" / coordinate["version"] / coordinate["release_id"] / coordinate["artifact_sha256"]

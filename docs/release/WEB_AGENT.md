@@ -19,10 +19,10 @@ The owner opens an issue in `lsdtools/lsdtools` from the release template, holdi
 
 | field | example |
 |---|---|
-| version and tag | `1.0.0rc3`, `v1.0.0rc3` |
-| the wheel and the sdist | `lsdtools-1.0.0rc3-py3-none-any.whl`, `lsdtools-1.0.0rc3.tar.gz` |
-| their sha256 | as in `release/1.0.0rc3.json` |
-| the gate receipts' sha256 | as in `release/1.0.0rc3.json` |
+| version and tag | `1.0.0rc4`, `v1.0.0rc4` |
+| the wheel and the sdist | `lsdtools-1.0.0rc4-py3-none-any.whl`, `lsdtools-1.0.0rc4.tar.gz` |
+| their sha256 | as in `release/1.0.0rc4.json` |
+| the gate receipts' sha256 | as in `release/1.0.0rc4.json` |
 | the workflow run | `https://github.com/lsdtools/lsdtools/actions/runs/<id>` |
 
 ## 3. Once: the PyPI account

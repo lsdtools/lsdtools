@@ -65,6 +65,10 @@ the command name belongs to the program, so global options go before it.
 A runtime `SELECTOR` is `latest`, a version `x.y.z` (its newest available build), or an exact
 `x.y.z/<artifact sha256>` (a unique prefix of at least 12 hex digits is accepted).
 
+An installed runtime's bytes come first from the target's artifact mirror (production: GitHub Releases,
+`lsdtools/runtimes`), then from the server. Either source is held to the server's signed manifest (its
+exact size and sha256), so a missing or wrong mirror file only falls back to the server.
+
 ### Exit status
 
 | status | error codes | meaning |

@@ -1,9 +1,11 @@
 """GET-only HTTPS to one server target: strict JSON answers and resumable, digest-checked artifacts.
 
-No redirect is followed and no answer is cached: the target's origin is the only authority. A JSON
-answer must be ``200 application/json``, uncompressed and at most 1 MiB. An artifact download is pinned
-to ``<origin>/updates/v1/artifacts/<id>/download``, resumes with ``Range`` from a ``.part`` file, and is
-accepted only at the signed manifest's exact size and sha256.
+No answer is cached and the target's origin is the only authority: a JSON answer must be ``200
+application/json``, uncompressed and at most 1 MiB, and follows no redirect. An artifact download comes
+from the origin's ``<origin>/updates/v1/artifacts/<id>/download`` or from one of the target's artifact
+mirrors (GitHub Releases), which may redirect only among :data:`MIRROR_HOSTS`. Either resumes with
+``Range`` from a ``.part`` file and is accepted only at the signed manifest's exact size and sha256, so a
+mirror carries bytes and nothing else.
 
 TLS trusts the platform's store (on Windows, its certificate store, so a corporate CA works). An
 ``HTTPS_PROXY`` (``http://[user:password@]host:port``) is tunnelled through with CONNECT unless
@@ -25,6 +27,7 @@ from typing import Any, Callable
 
 from .canonical import strict_loads
 from .errors import ManagerError
+from .mirrors import allowed_mirror
 from .paths import long_path
 from .targets import Target
 
@@ -36,6 +39,7 @@ _CHUNK = 1 << 20
 _ARTIFACT_PATH = re.compile(r"/updates/v1/artifacts/[0-9a-f]{32}/download")
 _CONTENT_RANGE = re.compile(r"bytes (\d+)-(\d+)/(\d+)")
 _USER_AGENT = "lsdtools/1"
+_MAX_REDIRECTS = 5
 
 
 def _tls_context() -> ssl.SSLContext:
@@ -89,18 +93,20 @@ class Transport:
         if self._scheme == "http" and not target.loopback:
             raise ManagerError("trust", f"{target.origin} is plain HTTP and not loopback")
 
-    def _connection(self):
+    def _connection(self, scheme: str | None = None, host: str | None = None, port: int | None = None):
+        """A connection to the origin, or to ``scheme://host:port`` (a mirror)."""
         if self._factory is not None:
             return self._factory()
-        if self._scheme == "http":
-            return http.client.HTTPConnection(self._host, self._port, timeout=self._timeout)
-        proxy = _proxy_for(self._host)
+        scheme, host, port = (self._scheme, self._host, self._port) if host is None else (scheme, host, port)
+        if scheme == "http":
+            return http.client.HTTPConnection(host, port, timeout=self._timeout)
+        proxy = _proxy_for(host)
         if proxy is None:
-            return http.client.HTTPSConnection(self._host, self._port, timeout=self._timeout,
-                                               context=_tls_context())
-        host, port, credentials = proxy
-        connection = http.client.HTTPSConnection(host, port, timeout=self._timeout, context=_tls_context())
-        connection.set_tunnel(self._host, self._port or 443,
+            return http.client.HTTPSConnection(host, port, timeout=self._timeout, context=_tls_context())
+        proxy_host, proxy_port, credentials = proxy
+        connection = http.client.HTTPSConnection(proxy_host, proxy_port, timeout=self._timeout,
+                                                 context=_tls_context())
+        connection.set_tunnel(host, port or 443,
                               headers={"Proxy-Authorization": credentials} if credentials else None)
         return connection
 
@@ -156,6 +162,17 @@ class Transport:
                  progress: Callable[[int, int], None] | None = None) -> Path:
         """Fetch ``url`` into ``part`` (resuming it) and return it once its size and sha256 are exact."""
         path = self.artifact_path(url)
+        return self._download(path, part, size, sha256, progress,
+                              lambda *state: self._fetch(path, *state))
+
+    def download_mirror(self, url: str, part: Path, *, size: int, sha256: str,
+                        progress: Callable[[int, int], None] | None = None) -> Path:
+        """:meth:`download` from an artifact mirror's ``url`` (:func:`mirror_url`), following its redirects only
+        among :data:`MIRROR_HOSTS`; the same exact size and sha256 decide whether its bytes are the artifact."""
+        return self._download(url, part, size, sha256, progress,
+                              lambda *state: self._fetch_mirror(url, *state))
+
+    def _download(self, path, part, size, sha256, progress, fetch) -> Path:
         digest = hashlib.sha256()
         have = 0
         target = long_path(part)
@@ -169,7 +186,7 @@ class Transport:
                     for chunk in iter(lambda: existing.read(_CHUNK), b""):
                         digest.update(chunk)
         if have < size:
-            have, digest = self._fetch(path, target, have, size, digest, progress)
+            have, digest = fetch(target, have, size, digest, progress)
         if have < size:
             raise ManagerError("temporary", f"{path} ended after {have} of {size} bytes; the rest resumes",
                                hint="retry: the download continues where it stopped")
@@ -179,44 +196,82 @@ class Transport:
         return part
 
     def _fetch(self, path, target, have, size, digest, progress):
-        headers = {"Accept-Encoding": "identity", "User-Agent": _USER_AGENT}
-        if have:
-            headers["Range"] = f"bytes={have}-"
         connection = self._connection()
         try:
-            connection.request("GET", path, headers=headers)
-            response = connection.getresponse()
-            if response.status == 200 and have:
-                have, digest = 0, hashlib.sha256()  # the server ignored the range: start over
-            elif response.status == 206 and have:
-                match = _CONTENT_RANGE.fullmatch(str(response.getheader("Content-Range") or ""))
-                if match is None or (int(match[1]), int(match[2]), int(match[3])) != (have, size - 1, size):
-                    raise ManagerError("protocol", f"{path} answered a range that is not the one asked for")
-            elif response.status != 200:
-                raise ManagerError("temporary" if response.status in (429, 502, 503, 504) else "protocol",
-                                   f"{self.target.origin} answered HTTP {response.status} for {path}")
-            if (response.getheader("Content-Encoding") or "identity") != "identity":
-                raise ManagerError("protocol", f"{path} answered compressed bytes")
-            with open(target, "r+b" if have else "wb") as output:
-                output.seek(have)
-                output.truncate()
-                while True:
-                    chunk = response.read(_CHUNK)
-                    if not chunk:
-                        break
-                    have += len(chunk)
-                    if have > size:
-                        raise ManagerError("trust", f"{path} delivered more than the signed {size} bytes")
-                    output.write(chunk)
-                    digest.update(chunk)
-                    if progress is not None:
-                        progress(have, size)
-                output.flush()
-                os.fsync(output.fileno())
+            connection.request("GET", path, headers=self._range_headers(have))
+            return self._receive(connection.getresponse(), path, self.target.origin, target, have, size, digest,
+                                 progress)
         except ManagerError:
             raise
         except (OSError, http.client.HTTPException, socket.timeout) as exc:
             raise self._unreachable(path, exc) from None
         finally:
             connection.close()
+
+    def _fetch_mirror(self, url, target, have, size, digest, progress):
+        for _hop in range(_MAX_REDIRECTS + 1):
+            parsed = urllib.parse.urlsplit(url)
+            if not allowed_mirror(parsed, loopback=self.target.loopback):
+                raise ManagerError("trust", f"an artifact mirror led outside its hosts: {parsed.scheme}://"
+                                            f"{parsed.hostname}")
+            path = parsed.path + (f"?{parsed.query}" if parsed.query else "")
+            connection = self._connection(parsed.scheme, parsed.hostname, parsed.port)
+            try:
+                connection.request("GET", path, headers=self._range_headers(have))
+                response = connection.getresponse()
+                if response.status in (301, 302, 303, 307, 308):
+                    location = response.getheader("Location")
+                    if not location:
+                        raise ManagerError("protocol", f"{parsed.hostname} redirected without a Location")
+                    url = urllib.parse.urljoin(url, location)
+                    continue
+                return self._receive(response, parsed.path, f"{parsed.scheme}://{parsed.hostname}", target, have,
+                                     size, digest, progress)
+            except ManagerError:
+                raise
+            except (OSError, http.client.HTTPException, socket.timeout) as exc:
+                detail = " ".join(str(exc).split())[:200] or type(exc).__name__
+                raise ManagerError("temporary", f"{parsed.hostname} did not answer {parsed.path}: {detail}") from None
+            finally:
+                connection.close()
+        raise ManagerError("protocol", f"an artifact mirror redirected more than {_MAX_REDIRECTS} times")
+
+    @staticmethod
+    def _range_headers(have: int) -> dict:
+        headers = {"Accept-Encoding": "identity", "User-Agent": _USER_AGENT}
+        if have:
+            headers["Range"] = f"bytes={have}-"
+        return headers
+
+    @staticmethod
+    def _receive(response, path, origin, target, have, size, digest, progress):
+        """Write one artifact response into ``target`` after ``have`` bytes: ``(have, digest)`` after it."""
+        if response.status == 200 and have:
+            have, digest = 0, hashlib.sha256()  # the server ignored the range: start over
+        elif response.status == 206 and have:
+            match = _CONTENT_RANGE.fullmatch(str(response.getheader("Content-Range") or ""))
+            if match is None or (int(match[1]), int(match[2]), int(match[3])) != (have, size - 1, size):
+                raise ManagerError("protocol", f"{path} answered a range that is not the one asked for")
+        elif response.status != 200:
+            raise ManagerError("not_found" if response.status == 404 else (
+                "temporary" if response.status in (429, 502, 503, 504) else "protocol"),
+                f"{origin} answered HTTP {response.status} for {path}")
+        if (response.getheader("Content-Encoding") or "identity") != "identity":
+            raise ManagerError("protocol", f"{path} answered compressed bytes")
+        with open(target, "r+b" if have else "wb") as output:
+            output.seek(have)
+            output.truncate()
+            while True:
+                chunk = response.read(_CHUNK)
+                if not chunk:
+                    break
+                have += len(chunk)
+                if have > size:
+                    raise ManagerError("trust", f"{path} delivered more than the signed {size} bytes")
+                output.write(chunk)
+                digest.update(chunk)
+                if progress is not None:
+                    progress(have, size)
+            output.flush()
+            os.fsync(output.fileno())
         return have, digest
