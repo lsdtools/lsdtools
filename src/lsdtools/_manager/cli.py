@@ -1,7 +1,8 @@
 """The ``lsdtools`` command (lsdtools-cli-v1): its outer commands, and the dispatch of every other one.
 
-Outer commands need no runtime: ``setup``, ``runtime ...``, ``doctor``, ``version`` and ``guide``; and
-``verify``, the release check of one installed runtime, which lsdtools runs from outside it. ``open`` starts
+Outer commands need no runtime: ``setup``, ``runtime ...``, ``doctor``, ``version`` and ``guide``;
+``verify``, the release check of one installed runtime, which lsdtools runs from outside it; and
+``selftest``, the suite of github.com/lsdtools/selftest against this lsdtools. ``open`` starts
 the selected runtime's Desktop directly, with no runtime command in between. ``python`` runs python's own
 command line in the selected runtime (``LSDCli.exe dev run``); any other command runs as
 ``<runtime>/LSDCli.exe lsdtools <argv>``, its argv unchanged.
@@ -22,7 +23,7 @@ from .report import Options, Reporter, split_globals
 
 __all__ = ["main"]
 
-_OUTER = ("setup", "runtime", "verify", "doctor", "version", "guide", "mcp-config", "handlers", "open")
+_OUTER = ("setup", "runtime", "verify", "doctor", "version", "guide", "mcp-config", "handlers", "open", "selftest")
 
 
 def _context(options: Options, *, platform_required: bool = True):
@@ -427,6 +428,7 @@ Exit status: 0 ok, 1 failed, 2 usage, 65 invalid data, 66 not found, 69 unavaila
   lsdtools runtime verify --full            hash every file of the runtime against its signature
   lsdtools runtime install X --repair       reinstall damaged files from fresh signed archives
   lsdtools verify                           the release check of the runtime, end to end
+  lsdtools selftest                         link, run, open and photograph the test packages, each step timed
 
 - 78 trust: a signature, key or digest did not verify; never bypass it, repair or reinstall.
 - 75 temporary: retry (network, a lock another lsdtools holds, a window still closing).
@@ -463,6 +465,33 @@ def _cmd_verify(options, reporter, args) -> int:
     data = verify_runtime(store, installation, project=args.project, reporter=reporter)
     return reporter.finish(data, f"verified {installation.selector} end to end ({data['integrity_model']}); "
                                  f"evidence in {data['verifier_home']}")
+
+
+def _cmd_selftest(options, reporter, args) -> int:
+    from pathlib import Path
+
+    from . import selftest
+
+    target, home, _store = _context(options, platform_required=False)
+    if args.source:
+        suite = Path(args.source).resolve()
+    else:
+        from .transport import Transport
+
+        if options.offline and not (home / "selftest" / selftest.SUITE["sha256"]).is_dir():
+            raise ManagerError("unavailable", "the selftest is downloaded once, and --offline was given")
+        suite = selftest.fetch(home, Transport(target),
+                               progress=lambda done, total: reporter.progress("selftest", done, total))
+    report = selftest.run(suite, home=home, store=options.store, target=options.target, keep=args.keep,
+                          note=reporter.note)
+    seconds = report["total_ms"] / 1000.0
+    if report["ok"]:
+        return reporter.finish(report, f"selftest passed: {len(report['steps'])} steps in {seconds:.1f} s")
+    failed = next((row for row in report["steps"] if not row["ok"]), None)
+    message = (f"selftest: {failed['step']} failed: {failed['detail']}" if failed
+               else "selftest: the suite stopped before its last step")
+    return reporter.finish(report, "", ManagerError("failed", message, data=report,
+                                                    hint="the report names each step; --keep keeps its scratch folder"))
 
 
 def _cmd_guide(options, reporter, args) -> int:
@@ -558,6 +587,10 @@ def _parser(command: str | None = None) -> argparse.ArgumentParser:
     if wanted("handlers"):
         handlers = commands.add_parser("handlers", help="this user's .lsd file and lsd:// link associations")
         handlers.add_argument("handlers_action", choices=("register", "unregister", "status"))
+    if wanted("selftest"):
+        selftest = commands.add_parser("selftest", help="check LSD works on this machine (github.com/lsdtools/selftest)")
+        selftest.add_argument("--from", dest="source", metavar="DIR", help="a checkout's suite instead of the release")
+        selftest.add_argument("--keep", action="store_true", help="keep the suite's scratch folder")
     if wanted("open"):
         open_ = commands.add_parser("open", help="open a project in its runtime's Desktop")
         open_.add_argument("project", help="a .lsd project")
@@ -774,7 +807,7 @@ def main(argv: list[str] | None = None) -> int:
     reporter = Reporter(options, args.command)
     handler = {"setup": _cmd_setup, "runtime": _cmd_runtime, "verify": _cmd_verify, "doctor": _cmd_doctor,
                "version": _cmd_version, "guide": _cmd_guide, "mcp-config": _cmd_mcp_config,
-               "handlers": _cmd_handlers, "open": _cmd_open}[args.command]
+               "handlers": _cmd_handlers, "open": _cmd_open, "selftest": _cmd_selftest}[args.command]
     try:
         return handler(options, reporter, args)
     except ManagerError as exc:
