@@ -32,7 +32,7 @@
       "lsdtools._manager.cli:main"
     ]
   ],
-  "source_date_epoch": 1793218889,
+  "source_date_epoch": 1793224239,
   "summary": "Install exact signed LSD runtimes and run projects, packages and scripts in them",
   "urls": [
     [
@@ -44,5 +44,5 @@
       "https://github.com/lsdtools/lsdtools"
     ]
   ],
-  "version": "1.0.0rc4"
+  "version": "1.0.0rc5"
 }

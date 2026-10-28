@@ -1,5 +1,5 @@
 {
-  "commit": "beda1e6fb72b4618044dc2e170a79acd353e46df",
+  "commit": "8e629f08ce121ea3c92ae2dcbf2aba31ba4999e2",
   "dirty": false,
   "files": {
     ".gitattributes": "0d7ee71bd406b17ade2bf2548a3272932ddbfb094b5304e639862fb1913c2e7a",
@@ -7,18 +7,18 @@
     ".github/workflows/check.yml": "3f000006311a3bebd44ec62ff16f7d75234918145e23ec4653ef7e917554b1a3",
     ".github/workflows/release.yml": "cd582135db0367e76ddbfda863ca59fafdb30677e67bf735f2b796d9368c0b7e",
     ".gitignore": "bf7224daa29be47cef87a50b0351d18e729d129be606faa8e4718116d6e51d87",
-    "CLI.md": "8ab11c5bb5df18bfe59c2f6bb4822f4f779596945520f86c817cf75988ee5c3d",
+    "CLI.md": "4749b95d898b9eb03e19be5be1d7a9f7aaab3187d7ad842e0a7489add5b8aa1b",
     "LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
     "README.md": "461b683325fac09391ae94c4494b3544b270488e52821c16a8b1eba574b0d7ff",
-    "docs/release/WEB_AGENT.md": "10a9329ca91085bc56b77fc129afa62e18b267801a7f9bc228e38b8784fa9f41",
-    "pyproject.toml": "0b5e41fbd757ed64b890cea942b633683ecc7ee70cfd54ef32142f8477eeacae",
-    "src/lsdtools/__init__.py": "bab65e465b63f8e735cf71b25d650d9560599fa67de61afa1e146b693fad3b5b",
-    "src/lsdtools/_manager/__init__.py": "15a86210c482e24afce6fb77d999e6f41da385219667ca10657e3cd79ee7fd4f",
+    "docs/release/WEB_AGENT.md": "575c18f5569f3e48340f7a8992f1d1278d9c057f9487c258c39236fdc185bf67",
+    "pyproject.toml": "9e57383b986dbf0d6e46aacf271c763cded57dea39da0d8a635858be805929c6",
+    "src/lsdtools/__init__.py": "561a64401dc43e2894c4ba5795ddaad64460b5ade689c778f9c4377cc4599502",
+    "src/lsdtools/_manager/__init__.py": "7e161fef46d673d8e7edd1d3f03691774ac153da1db5e5e3f585c43bba4476f0",
     "src/lsdtools/_manager/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
     "src/lsdtools/_manager/archive.py": "3542a3f4e00791a06c26afd561a613119add8f99c3f52c4649f38e1d9b40acef",
     "src/lsdtools/_manager/canonical.py": "b4210ab8aeb65cd8cfe1a9e0db66b49ffca6aba3fa6c77acd9ac6f6ff8f1b4e4",
     "src/lsdtools/_manager/catalog.py": "2d0819099cd9b4ebce923c9091dd932fbde8bc643bb888f5a8bc7798e7347617",
-    "src/lsdtools/_manager/cli.py": "a98eeb21c4462e3186cc8e2edd070f989a00b5d7512e97ba5a1ff5cf40c6e194",
+    "src/lsdtools/_manager/cli.py": "a03927ec0ac17e06227f7ce1e7259682371a7040da72882a671317480b377610",
     "src/lsdtools/_manager/ed25519.py": "b55b4dc38b4c117a96a65d46ee179710dc5e479fd072104254f99b50dd094026",
     "src/lsdtools/_manager/errors.py": "73d23baba252c879f6a5fc46f2482f20ab1f355d5403c9b28a875ffa41b4d79e",
     "src/lsdtools/_manager/gui.py": "3229b5f11a870ec06f59f3dea733c777540c052c4b7738590459b7843b0e0136",
@@ -30,6 +30,7 @@
     "src/lsdtools/_manager/paths.py": "a711f48134ab63477aec4f9ce8d9d2c190da2379138cdee2f0fe74ce25f6bdf9",
     "src/lsdtools/_manager/platforms_v1.json": "c2236ce314e7f1aa68d48b4f4d3cc8306682dd702532001f5b7c3efc8abd9c66",
     "src/lsdtools/_manager/report.py": "685e54abd3683d0826ea32ecd7c668bee0d9edd5e0e24895f79939dd64003950",
+    "src/lsdtools/_manager/selftest.py": "78ea3c818d758db33a35b22d39aa38f3b49fe19c9bd1a72cbe4d16e2f2571df1",
     "src/lsdtools/_manager/store.py": "13966c70365dc5ee48f60ef2f04193664d3385ffbb0d080694cffd1dd0dc5a76",
     "src/lsdtools/_manager/targets.py": "f8d8b08f8ce7517aa0b1bc59bf04b8ee02416a3830598c5f65f49f521a4e7f8a",
     "src/lsdtools/_manager/targets_v1.json": "0d0a9252b085c77bae5c23f727e532f70695b4bec7a87d98b4e380093002733b",
@@ -41,7 +42,7 @@
     "tools/check_provenance.py": "6779456af4f853f4ceb24de52bb3fc2513f7ac595f22119543234dc6f390d67a",
     "tools/check_release.py": "eeb8a5515964e817fc796b1d3c3818bc7872b5eb61015689c72e38ac1b4871b9",
     "tools/wheel_backend.py": "93eb102865520ceeff92ba32f414ae834f291ba9891c23fc57f466c0400a3228",
-    "wheel.json": "7e4337d8a852120438f2614f93b3bfd4342558066d4ee5cf4dc96b008321c319"
+    "wheel.json": "6b3414b409097650b28474b267eb1431d150a338e59282f56f2c4bc847ceddab"
   },
   "generator": {
     "sha256": "15ca6983ae583c88e985bebce269b41a18fdb86bf9399387f78630fde8675045",
@@ -49,6 +50,6 @@
   },
   "product": "lsd-product",
   "schema": "lsdtools.provenance.v1",
-  "source_date_epoch": 1793218889,
-  "version": "1.0.0rc4"
+  "source_date_epoch": 1793224239,
+  "version": "1.0.0rc5"
 }
